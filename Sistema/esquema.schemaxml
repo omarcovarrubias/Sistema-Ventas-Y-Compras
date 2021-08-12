@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemadesigner version="6.5">
+<source>
+<database charset="latin1" collation="latin1_swedish_ci">qkarne</database>
+</source>
+<canvas zoom="100">
+<tables>
+<table name="cliente" view="colnames">
+<left>360</left>
+<top>452</top>
+<width>131</width>
+<height>231</height>
+<sql_create_table>CREATE TABLE `cliente` (
+  `idcliente` int(11) NOT NULL AUTO_INCREMENT,
+  `codigo` int(11) DEFAULT NULL,
+  `nombreCliente` varchar(40) DEFAULT NULL,
+  `apellidos` varchar(40) DEFAULT NULL,
+  `direccion` varchar(40) DEFAULT NULL,
+  `correo` varchar(40) DEFAULT NULL,
+  `numeroCelular` varchar(40) DEFAULT NULL,
+  `fecha` datetime DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  PRIMARY KEY (`idcliente`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="detalle_compras" view="colnames">
+<left>1157</left>
+<top>329</top>
+<width>122</width>
+<height>231</height>
+<sql_create_table>CREATE TABLE `detalle_compras` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_compra` int(11) DEFAULT NULL,
+  `id_producto` int(11) DEFAULT NULL,
+  `cantidad` decimal(6,2) DEFAULT NULL,
+  `precio` decimal(5,2) DEFAULT NULL,
+  `folio` int(11) DEFAULT NULL,
+  `vendedor` varchar(33) DEFAULT NULL,
+  `proveedor` varchar(33) DEFAULT NULL,
+  `id_proveedor` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_producto` (`id_producto`),
+  KEY `id_compra` (`id_compra`),
+  KEY `id_proveedor` (`id_proveedor`),
+  CONSTRAINT `detalle_compras_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`idproducto`),
+  CONSTRAINT `detalle_compras_ibfk_2` FOREIGN KEY (`id_proveedor`) REFERENCES `proveedor` (`idproveedor`)
+) ENGINE=InnoDB AUTO_INCREMENT=185 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="detalle_ventas" view="colnames">
+<left>586</left>
+<top>413</top>
+<width>113</width>
+<height>282</height>
+<sql_create_table>CREATE TABLE `detalle_ventas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_venta` int(11) DEFAULT NULL,
+  `cantidad` decimal(6,2) DEFAULT NULL,
+  `id_producto` int(11) DEFAULT NULL,
+  `precio` decimal(5,2) DEFAULT NULL,
+  `folio` int(11) DEFAULT NULL,
+  `cliente` varchar(33) DEFAULT NULL,
+  `vendedor` varchar(33) DEFAULT NULL,
+  `saldo` decimal(5,2) DEFAULT NULL,
+  `total` decimal(5,2) DEFAULT NULL,
+  `cambio` decimal(5,2) DEFAULT NULL,
+  `id_cliente` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_producto` (`id_producto`),
+  KEY `id_cliente` (`id_cliente`),
+  CONSTRAINT `detalle_ventas_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`idproducto`),
+  CONSTRAINT `detalle_ventas_ibfk_2` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`idcliente`)
+) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="detalles_pedido" view="colnames">
+<left>161</left>
+<top>187</top>
+<width>153</width>
+<height>231</height>
+<sql_create_table>CREATE TABLE `detalles_pedido` (
+  `id_pedido` int(11) DEFAULT NULL,
+  `cantidad` int(11) DEFAULT NULL,
+  `id_servicio` int(11) DEFAULT NULL,
+  `precio` decimal(6,2) DEFAULT NULL,
+  `folio` varchar(44) DEFAULT NULL,
+  `cliente` varchar(44) DEFAULT NULL,
+  `vendedor` varchar(44) DEFAULT NULL,
+  `id_productoCliente` int(11) DEFAULT NULL,
+  `id_cliente` int(11) DEFAULT NULL,
+  KEY `id_servicio` (`id_servicio`),
+  KEY `id_productoCliente` (`id_productoCliente`),
+  KEY `id_cliente` (`id_cliente`),
+  CONSTRAINT `detalles_pedido_ibfk_1` FOREIGN KEY (`id_servicio`) REFERENCES `servicios` (`id`),
+  CONSTRAINT `detalles_pedido_ibfk_2` FOREIGN KEY (`id_productoCliente`) REFERENCES `productosclientes` (`id`),
+  CONSTRAINT `detalles_pedido_ibfk_3` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`idcliente`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="empleado" view="colnames">
+<left>1008</left>
+<top>42</top>
+<width>146</width>
+<height>282</height>
+<sql_create_table>CREATE TABLE `empleado` (
+  `idempleado` int(11) NOT NULL AUTO_INCREMENT,
+  `codigo` int(11) DEFAULT NULL,
+  `nombreEmpleado` varchar(40) DEFAULT NULL,
+  `apellidos` varchar(40) DEFAULT NULL,
+  `correo` varchar(40) DEFAULT NULL,
+  `usuario` varchar(40) DEFAULT NULL,
+  `contraseña` varchar(40) DEFAULT NULL,
+  `Rol_id` int(11) DEFAULT NULL,
+  `fecha` datetime DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `telefono` varchar(33) DEFAULT NULL,
+  `domicilio` varchar(44) DEFAULT NULL,
+  PRIMARY KEY (`idempleado`),
+  KEY `Rol_id` (`Rol_id`),
+  CONSTRAINT `empleado_ibfk_1` FOREIGN KEY (`Rol_id`) REFERENCES `rol` (`id_Rol`)
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="productosclientes" view="colnames">
+<left>579</left>
+<top>45</top>
+<width>110</width>
+<height>163</height>
+<sql_create_table>CREATE TABLE `productosclientes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `codigo` varchar(33) DEFAULT NULL,
+  `descripcion` varchar(44) DEFAULT NULL,
+  `fecha` datetime DEFAULT NULL,
+  `cliente_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `cliente_id` (`cliente_id`),
+  CONSTRAINT `productosclientes_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `cliente` (`idcliente`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="productos" view="colnames">
+<left>749</left>
+<top>355</top>
+<width>140</width>
+<height>231</height>
+<sql_create_table>CREATE TABLE `productos` (
+  `idproducto` int(11) NOT NULL AUTO_INCREMENT,
+  `codigo` varchar(100) DEFAULT NULL,
+  `descripcion` varchar(100) DEFAULT NULL,
+  `costo` decimal(5,2) DEFAULT NULL,
+  `precio` decimal(5,2) DEFAULT NULL,
+  `nombreempresa` varchar(50) DEFAULT NULL,
+  `stock` decimal(6,2) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `id_proveedor` int(11) DEFAULT NULL,
+  PRIMARY KEY (`idproducto`),
+  KEY `id_proveedor` (`id_proveedor`),
+  CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`id_proveedor`) REFERENCES `proveedor` (`idproveedor`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="proveedor" view="colnames">
+<left>973</left>
+<top>596</top>
+<width>149</width>
+<height>265</height>
+<sql_create_table>CREATE TABLE `proveedor` (
+  `idproveedor` int(11) NOT NULL AUTO_INCREMENT,
+  `codigo` int(11) DEFAULT NULL,
+  `nombreProveedor` varchar(40) DEFAULT NULL,
+  `apellidos` varchar(40) DEFAULT NULL,
+  `direccion` varchar(40) DEFAULT NULL,
+  `correo` varchar(40) DEFAULT NULL,
+  `numeroCelular` varchar(44) DEFAULT NULL,
+  `fecha` datetime DEFAULT NULL,
+  `empresa` varchar(40) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `id_proveedor` int(11) DEFAULT NULL,
+  PRIMARY KEY (`idproveedor`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="rol" view="colnames">
+<left>1231</left>
+<top>0</top>
+<width>98</width>
+<height>112</height>
+<sql_create_table>CREATE TABLE `rol` (
+  `id_Rol` int(11) NOT NULL,
+  `Permisos` varchar(44) DEFAULT NULL,
+  PRIMARY KEY (`id_Rol`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="servicios" view="colnames">
+<left>40</left>
+<top>480</top>
+<width>100</width>
+<height>180</height>
+<sql_create_table>CREATE TABLE `servicios` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `servicios` varchar(44) DEFAULT NULL,
+  `precio` decimal(7,2) DEFAULT NULL,
+  `folio` varchar(55) DEFAULT NULL,
+  `vendedor` varchar(55) DEFAULT NULL,
+  `cantidad` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+</tables>
+</canvas>
+</schemadesigner>
